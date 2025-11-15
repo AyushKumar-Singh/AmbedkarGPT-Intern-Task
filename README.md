@@ -1,130 +1,129 @@
-# **AmbedkarGPT – RAG-Based Q&A System (Intern Task)**
+# 🎓 AmbedkarGPT – RAG-Based Q&A System
 
-A lightweight **Retrieval-Augmented Generation (RAG)** project built as part of the **Internshala Internship – Phase 1 Core Skills Evaluation**.  
-This prototype demonstrates the ability to build an end-to-end AI pipeline using **LangChain**, **ChromaDB**, **HuggingFace Embeddings**, and **Ollama (Mistral 7B)** — all running fully **offline and locally**.
-
----
-
-## 🚀 **Project Overview**
-
-AmbedkarGPT is a simple command-line Q&A system that:
-
-1. Loads a provided speech by **Dr. B. R. Ambedkar** (`speech.txt`)
-2. Splits the text into meaningful chunks  
-3. Converts each chunk into vector embeddings using  
-   **sentence-transformers/all-MiniLM-L6-v2**
-4. Stores these embeddings in a local **ChromaDB** vector store
-5. Uses a **RAG pipeline** to retrieve relevant context when a user asks a question
-6. Generates the final answer using **Ollama’s Mistral 7B** model
-
-This system ensures that **all answers come strictly from the speech**, not from external data.
+A lightweight, fully-local Retrieval-Augmented Generation (RAG) prototype that answers questions from a short speech by Dr. B. R. Ambedkar. Built for the Internshala Phase 1 Core Skills Evaluation using LangChain, ChromaDB, HuggingFace embeddings and Ollama (Mistral 7B).
 
 ---
 
-## 🧠 **Tech Stack Used**
-
-| Component | Technology |
-|----------|------------|
-| Programming Language | Python 3.8+ |
-| Core Framework | LangChain |
-| Vector Database | ChromaDB |
-| Embeddings | HuggingFace Embeddings (MiniLM-L6-v2) |
-| Local LLM | Ollama – Mistral 7B |
-| Text Loader & Splitter | LangChain utilities |
-| Retrieval Pipeline | LangChain RetrievalQA |
+## Project goal (Intern task)
+Implement a CLI Q&A system that:
+1. Loads `speech.txt`.  
+2. Splits the speech into chunks.  
+3. Creates HF embeddings (sentence-transformers/all-MiniLM-L6-v2).  
+4. Persists embeddings in ChromaDB.  
+5. Retrieves context for a user question.  
+6. Generates answers with Ollama (Mistral 7B).  
+All components must run locally with no API keys.
 
 ---
 
-## 📂 **Repository Structure**
+## Quick features
+- Fully offline and local.  
+- Persistent Chroma vector store.  
+- Embeddings: sentence-transformers/all-MiniLM-L6-v2.  
+- Local LLM: Ollama (Mistral 7B).  
+- Simple interactive CLI.
 
+---
+
+## Repo layout
 ```
 AmbedkarGPT-Intern-Task/
-│
-├── main.py               # The main CLI Q&A application
-├── requirements.txt      # Python dependencies
-├── README.md             # Project documentation
-└── speech.txt            # Provided Ambedkar speech excerpt
+├── main.py             # CLI entrypoint and RAG pipeline
+├── requirements.txt    # Python deps
+├── README.md           # This file
+└── speech.txt          # Provided Ambedkar excerpt
 ```
 
-## 📥 **Setup & Installation**
+---
 
-To set up the AmbedkarGPT system, follow these steps:
+## Prerequisites and notes
 
-1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/ayushkumar-singh/ambedkargpt.git
-    cd AmbedkarGPT-Intern-Task
-    ```
+- Python 3.8+ (recommended 3.10 or 3.11).  
+- Ollama + Mistral 7B installed locally.
 
-2. **Install the required dependencies**:
-    It is recommended to use a virtual environment. First, create and activate a virtual environment:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
-    Then, install the dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. **Download the speech file**:
-    Obtain the `speech.txt` file containing the speech by Dr. B. R. Ambedkar and place it in the root directory of the project.
-
-4. **Run the application**:
-    To start the application, run:
-    ```bash
-    python app.py
-    ```
-    Follow the on-screen instructions to interact with the system.
+Important for Windows users:
+- Ollama runs in WSL2 (recommended). Install WSL2 and run Ollama inside the Linux distro:
+  - In Windows PowerShell: `wsl --install`
+  - Inside WSL shell:
+    - `curl -fsSL https://ollama.ai/install.sh | sh`
+    - `ollama pull mistral`
 
 ---
 
-## 🧑‍💻 **How to Use**
+## Setup (Windows / WSL-friendly)
 
-1. **Ask a Question**:
-    Once the application is running, you can type in any question related to the speech by Dr. B. R. Ambedkar.
+1. Clone the repo:
+   git clone <your-repo-url>
+   cd AmbedkarGPT-Intern-Task
 
-2. **Receive Answer**:
-    The system will process your question, retrieve relevant context from the speech, and generate an answer using the Mistral 7B model.
+2. Create and activate a venv:
+   - Windows (PowerShell):
+     python -m venv venv
+     .\venv\Scripts\Activate.ps1
+   - WSL / macOS / Linux:
+     python -m venv venv
+     source venv/bin/activate
 
-3. **Continue the Conversation**:
-    You can ask follow-up questions or new questions at any time. The system is designed to handle multi-turn conversations.
+3. Install dependencies:
+   pip install -r requirements.txt
 
----
-
-## ⚙️ **Customization & Development**
-
-- To customize the behavior or improve the system, you can modify the underlying scripts:
-  - `embeddings.py`: Change embedding models or parameters.
-  - `retrieve.py`: Alter retrieval methods or context length.
-  - `answer.py`: Tweak answer generation settings or switch models.
-
-- For development, you can add new features or improve existing ones by editing the respective Python files. Use clear, descriptive names for new functions or classes, and ensure to update this documentation if you add significant new features.
+4. Ensure Ollama is installed and `mistral` is pulled (in the environment where `ollama` runs).
 
 ---
 
-## 🐞 **Troubleshooting & FAQs**
+## Run
 
-**Q1: What to do if I encounter an error while running the application?**  
-A1: Please check the following:
-  - Ensure you have installed all the required dependencies listed in `requirements.txt`.
-  - Make sure you are using Python 3.8 or higher.
-  - If the error persists, please raise an issue on the [GitHub repository](https://github.com/yourusername/ambedkargpt/issues) with details of the error.
+Start the CLI:
 
-**Q2: Can I use my own text files?**  
-A2: Yes, you can use any text file as a knowledge base. Just replace `speech.txt` with your file and ensure it is properly formatted.
+python main.py
 
-**Q3: How can I improve the answer quality?**  
-A3: The answer quality depends on the underlying models and the quality of the embeddings. You can experiment with different models or fine-tune the existing models on a similar domain corpus.
+On first run the script should build the Chroma DB (persist directory like `chroma_db`); subsequent runs reuse it.
+
+Type a question when prompted. Type `exit` or `quit` to stop.
 
 ---
 
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Implementation notes (what main.py should do)
+- Load speech.txt with a TextLoader.  
+- Split text (e.g., chunk_size=500, overlap=50).  
+- Use HuggingFaceEmbeddings (all-MiniLM-L6-v2).  
+- Persist Chroma vectorstore to `./chroma_db`.  
+- Create a RetrievalQA chain using Ollama LLM configured to use `mistral`.  
+- Prompt LLM to answer only from retrieved context to reduce hallucinations.
 
 ---
 
-**Thank you for using AmbedkarGPT! 🙌**  
-**Let's keep the legacy of Dr. B. R. Ambedkar alive through his words.**
+## Troubleshooting
+
+- "ollama: command not found": Run Ollama inside WSL or the OS where Ollama is installed.  
+- Embeddings fail to download: ensure network access during first run.  
+- Chroma dimension mismatch after swapping embedding model: delete `chroma_db/` and rebuild.
+
+Useful commands:
+- Rebuild DB: delete `chroma_db/` then re-run main.py.
+- Check ollama models: `ollama list`
+
+---
+
+## Sample questions
+- What is the real remedy according to Ambedkar?  
+- What analogy does Ambedkar use for social reform?  
+- Why can’t caste and belief in the shastras coexist?
+
+---
+
+## Deliverables checklist
+- main.py — working, documented code.  
+- requirements.txt — pinned dependencies.  
+- README.md — this file.  
+- speech.txt — provided speech excerpt.
+
+---
+
+## License
+MIT
+
+---
+
+Thank you — this README focuses on clarity, local-first setup, and Windows/WSL specifics required for Ollama.
 
