@@ -1,129 +1,201 @@
-# 🎓 AmbedkarGPT – RAG-Based Q&A System
+# 🎓 AmbedkarGPT — Local RAG-Based Question Answering System  
+**Fully Offline • ChromaDB • HuggingFace Embeddings • Ollama (Mistral 7B)**
 
-A lightweight, fully-local Retrieval-Augmented Generation (RAG) prototype that answers questions from a short speech by Dr. B. R. Ambedkar. Built for the Internshala Phase 1 Core Skills Evaluation using LangChain, ChromaDB, HuggingFace embeddings and Ollama (Mistral 7B).
+AmbedkarGPT is a lightweight Retrieval-Augmented Generation (RAG) prototype designed for the **Internshala Phase-1 Core Skills Evaluation**.  
+It processes an excerpt of Dr. B. R. Ambedkar’s speech and answers questions **locally** using vector search + a local LLM (Mistral 7B via Ollama).
 
----
-
-## Project goal (Intern task)
-Implement a CLI Q&A system that:
-1. Loads `speech.txt`.  
-2. Splits the speech into chunks.  
-3. Creates HF embeddings (sentence-transformers/all-MiniLM-L6-v2).  
-4. Persists embeddings in ChromaDB.  
-5. Retrieves context for a user question.  
-6. Generates answers with Ollama (Mistral 7B).  
-All components must run locally with no API keys.
+No cloud APIs. No external dependencies. 100% offline.
 
 ---
 
-## Quick features
-- Fully offline and local.  
-- Persistent Chroma vector store.  
-- Embeddings: sentence-transformers/all-MiniLM-L6-v2.  
-- Local LLM: Ollama (Mistral 7B).  
-- Simple interactive CLI.
+## 🎯 Project Goal (Intern Task Requirements)
+
+The system must:
+
+1. Load `speech.txt`  
+2. Split text into chunks  
+3. Generate embeddings using **sentence-transformers/all-MiniLM-L6-v2**  
+4. Store embeddings in **ChromaDB (persistent)**  
+5. Retrieve relevant chunks based on user questions  
+6. Generate answers using **Ollama (Mistral 7B)**  
+7. Run fully offline — *strictly local execution*
+
+This repository contains a clean, minimal solution that satisfies all requirements.
 
 ---
 
-## Repo layout
+## ⚡ Features
+
+- 🧠 **Local NLP embeddings** (HuggingFace MiniLM-L6)  
+- 📦 **ChromaDB persistent vector store**  
+- 🤖 **Local LLM inference** using **Ollama + Mistral 7B**  
+- 🧩 **LangChain-based RAG pipeline**  
+- 💻 **Simple interactive CLI**  
+- 🔒 **Runs fully offline** after initial embedding download  
+- ⚙️ **Clear and modular implementation**
+
+---
+
+## 📁 Repository Structure
+
 ```
 AmbedkarGPT-Intern-Task/
-├── main.py             # CLI entrypoint and RAG pipeline
-├── requirements.txt    # Python deps
+├── main.py             # CLI entry point + RAG pipeline
+├── requirements.txt    # Python dependencies
 ├── README.md           # This file
-└── speech.txt          # Provided Ambedkar excerpt
+└── speech.txt          # Provided Ambedkar speech excerpt
 ```
 
 ---
 
-## Prerequisites and notes
+## 🛠️ Prerequisites
 
-- Python 3.8+ (recommended 3.10 or 3.11).  
-- Ollama + Mistral 7B installed locally.
+### **1. Python**
+- Python **3.8+** recommended (3.10 / 3.11 preferred)
 
-Important for Windows users:
-- Ollama runs in WSL2 (recommended). Install WSL2 and run Ollama inside the Linux distro:
-  - In Windows PowerShell: `wsl --install`
-  - Inside WSL shell:
-    - `curl -fsSL https://ollama.ai/install.sh | sh`
-    - `ollama pull mistral`
+### **2. Ollama + Mistral 7B**
+Ollama does not run natively on Windows — use **WSL2**.
 
----
+**Windows Setup:**
+```bash
+wsl --install
+```
 
-## Setup (Windows / WSL-friendly)
-
-1. Clone the repo:
-   git clone <your-repo-url>
-   cd AmbedkarGPT-Intern-Task
-
-2. Create and activate a venv:
-   - Windows (PowerShell):
-     python -m venv venv
-     .\venv\Scripts\Activate.ps1
-   - WSL / macOS / Linux:
-     python -m venv venv
-     source venv/bin/activate
-
-3. Install dependencies:
-   pip install -r requirements.txt
-
-4. Ensure Ollama is installed and `mistral` is pulled (in the environment where `ollama` runs).
+Inside WSL terminal:
+```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+ollama pull mistral
+```
 
 ---
 
-## Run
+## 🚀 Setup Instructions (Windows / WSL Compatible)
 
-Start the CLI:
+### **Clone the repository**
+```bash
+git clone <your-repo-url>
+cd AmbedkarGPT-Intern-Task
+```
 
+### **Create a Python virtual environment**
+**Windows PowerShell:**
+```bash
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**WSL / Linux / macOS:**
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+### **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+### **Verify Ollama installation**
+Inside WSL:
+```bash
+ollama list
+```
+
+Make sure `mistral` appears in the list.
+
+---
+
+## ▶️ Run the Application
+
+```bash
 python main.py
+```
 
-On first run the script should build the Chroma DB (persist directory like `chroma_db`); subsequent runs reuse it.
+### On first run:
+- Creates `chroma_db/` directory  
+- Generates embeddings  
+- Persists vector store  
 
-Type a question when prompted. Type `exit` or `quit` to stop.
+### On subsequent runs:
+- Immediately loads vector DB  
+- Fast retrieval + answer generation  
 
----
-
-## Implementation notes (what main.py should do)
-- Load speech.txt with a TextLoader.  
-- Split text (e.g., chunk_size=500, overlap=50).  
-- Use HuggingFaceEmbeddings (all-MiniLM-L6-v2).  
-- Persist Chroma vectorstore to `./chroma_db`.  
-- Create a RetrievalQA chain using Ollama LLM configured to use `mistral`.  
-- Prompt LLM to answer only from retrieved context to reduce hallucinations.
-
----
-
-## Troubleshooting
-
-- "ollama: command not found": Run Ollama inside WSL or the OS where Ollama is installed.  
-- Embeddings fail to download: ensure network access during first run.  
-- Chroma dimension mismatch after swapping embedding model: delete `chroma_db/` and rebuild.
-
-Useful commands:
-- Rebuild DB: delete `chroma_db/` then re-run main.py.
-- Check ollama models: `ollama list`
+### Exit:
+Type `exit` or `quit`.
 
 ---
 
-## Sample questions
-- What is the real remedy according to Ambedkar?  
-- What analogy does Ambedkar use for social reform?  
-- Why can’t caste and belief in the shastras coexist?
+## 🧠 Implementation Details (Summary of main.py Logic)
+
+- Load speech with `TextLoader`  
+- Split into chunks (`chunk_size=500`, `chunk_overlap=50`)  
+- Create embeddings via:
+
+```python
+HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+```
+
+- Persist vector store to:
+
+```
+./chroma_db
+```
+
+- Use `Ollama` LLM with `"mistral"` model  
+- Build LangChain `RetrievalQA` pipeline  
+- Enforce grounded answers (no hallucinations)  
+- Interactive CLI loop for Q&A  
 
 ---
 
-## Deliverables checklist
-- main.py — working, documented code.  
-- requirements.txt — pinned dependencies.  
-- README.md — this file.  
-- speech.txt — provided speech excerpt.
+## 🧹 Troubleshooting
+
+### ❌ `ollama: command not found`
+- You must run Ollama **inside WSL**, not PowerShell.
+
+### ❌ Embedding metadata mismatch / Chroma errors
+Delete the DB and rebuild:
+```bash
+rm -rf chroma_db/
+python main.py
+```
+
+### ❌ Mistral model not found
+Inside WSL:
+```bash
+ollama pull mistral
+```
+
+### ❌ Very slow startup (first run only)
+Embeddings + vector DB creation takes time.  
+Subsequent runs are fast.
 
 ---
 
-## License
-MIT
+## ❓ Example Questions
+
+Try:
+- *“What remedy does Ambedkar propose?”*  
+- *“What analogy does Ambedkar use for social reform?”*  
+- *“Why can’t caste and belief in shastras coexist?”*
 
 ---
 
-Thank you — this README focuses on clarity, local-first setup, and Windows/WSL specifics required for Ollama.
+## 📦 Deliverables Checklist (Internshala)
+
+- ✔ `main.py` — Working CLI RAG pipeline  
+- ✔ `requirements.txt` — Dependencies included  
+- ✔ `speech.txt` — Provided text  
+- ✔ `README.md` — Complete documentation  
+- ✔ Local embeddings + local LLM (no external API)
+
+---
+
+## 📜 License
+MIT License
+
+---
+
+## 🙏 Acknowledgement
+Built as part of the **Internshala Core Skills Evaluation (Phase 1)**.
 
